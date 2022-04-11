@@ -2,10 +2,7 @@ package src;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ContactsApplication {
 
@@ -19,29 +16,15 @@ public class ContactsApplication {
         String directory="data";
         String fileName="contacts.txt";
 
-        Path dataDir= Paths.get(directory);
-        Path contactsPath=Paths.get(directory, fileName);
 
-        List<String> fileData=new ArrayList<>();
+        FileManager contactsFile=new FileManager(fileName,directory);
+
 
 
 //            creates data directory and empty contacts file
-        try{
-            if (Files.notExists(dataDir)) {
-                Files.createDirectories(dataDir);
-            }
-            if (Files.notExists(contactsPath)){
-                Files.createFile(contactsPath);
+        contactsFile.writeFile();
 
-            }  //        read the contents of the file and store in string list
-
-        } catch (IOException e) {
-            System.out.println("issue creating directory and file");
-            e.printStackTrace();
-        }
-
-
-
+//      starts program UI
       do {
 
           System.out.println("1. View contacts.\n" +
@@ -51,51 +34,64 @@ public class ContactsApplication {
                   "5. Exit.\n" +
                   "Enter an option (1, 2, 3, 4 or 5):");
 
-          List<String> userContact=new ArrayList<>();
+
+
           String userChoice = scanner.nextLine();
 
-          try {
-              Files.write(contactsPath ,fileData);
-          } catch (IOException e) {
-              e.printStackTrace();
-              System.out.println("Error writing to file: " + contactsPath.getFileName());
-          }
+
+
           if (userChoice.equals("1")) {
 //              code to view contacts
-              System.out.println("you picked 1");
+              System.out.println("you picked View Contacts");
+
+              contactsFile.printLines();
+
           }
           if (userChoice.equals("2")) {
 //              code to add new contact
               System.out.println("you picked  Add a Contact ");
               System.out.println();
-              System.out.println("please enter Contacts Name|Phone#");
-              userContact= Collections.singletonList(scanner.nextLine());
+              System.out.println("please enter Contacts Name");
+              String userCreateName=scanner.nextLine();
+              System.out.println("please enter Contacts Number");
+              String userCreateNumber=scanner.nextLine();
+              Contact userContact=new Contact(userCreateName,userCreateNumber);
+              System.out.println("You have entered \n"+userContact.getNameNumber());
 
-              try {
-                  Files.write(contactsPath,userContact, StandardOpenOption.APPEND);
-              } catch (IOException e) {
-                  System.out.println("issue writing files");
-                  e.printStackTrace();
-              }
+              contactsFile.addLine(userContact.getNameNumber());
+
+              contactsFile.writeFile();
 
 
           }
           if (userChoice.equals("3")) {
 //              code to search a contact by name
-              System.out.println("you picked 3");
+              System.out.println("you picked Search by Name");
+              System.out.println("Please enter a contact Name");
+              String userSearch= scanner.nextLine();
+              contactsFile.getContact(userSearch);
           }
           if (userChoice.equals("4")) {
 //              code to delete and existing contact.
-              System.out.println("you picked 4");
+              System.out.println("you picked delete an existing contact");
+              contactsFile.printLines();
+//              System.out.println();
+              System.out.println("Please enter the Name of the contact you would like to delete");
+              String userSelection= scanner.nextLine();
+                contactsFile.removeLine(userSelection);
+
+
           }
           if (userChoice.equals("5")) {
               System.out.println("you picked 5, Good Bye!");
               choice="no";
               break;
           }
-          System.out.println("would you like to continue y/n?");
+
+          System.out.println("Would you like to continue y/n?");
 
           choice=scanner.nextLine();
+
       }while (choice.equalsIgnoreCase("y"));
 
 
