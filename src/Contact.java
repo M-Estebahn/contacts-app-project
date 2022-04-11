@@ -1,4 +1,4 @@
-package src;
+
 
 public class Contact {
     private  String name;

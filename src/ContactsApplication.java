@@ -1,5 +1,3 @@
-package src;
-
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
@@ -17,7 +15,7 @@ public class ContactsApplication {
         String fileName="contacts.txt";
 
 
-        FileManager contactsFile=new FileManager(fileName,directory);
+      FileManager contactsFile=new FileManager(fileName,directory);
 
 
 
@@ -72,7 +70,7 @@ public class ContactsApplication {
               contactsFile.getContact(userSearch);
           }
           if (userChoice.equals("4")) {
-//              code to delete and existing contact.
+//              code to delete an existing contact.
               System.out.println("you picked delete an existing contact");
               contactsFile.printLines();
 //              System.out.println();
